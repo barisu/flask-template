@@ -4,15 +4,15 @@ services:
     build: .
     tty: true
     ports:
-		- 8080:8080
+      - 8080:8080
     volumes:
-      	- ./flask:/projects
+      - ./flask:/projects
     environment:
-		TZ: Asia/Tokyo
+      TZ: Asia/Tokyo
     # 開発用サーバを実行
     # command: python -m flask run --debugger --reload --host 0.0.0.0 --port 8080
     # アプリケーションサーバを起動
-    command:  gunicorn -b :8080 app:app
+      command:  gunicorn -b :8080 app:app
   db:
     image: mysql
     tty: true
@@ -21,18 +21,18 @@ services:
       - ./db/data:/var/lib/mysql
       - ./db/init:/docker-entrypoint-initdb.d
     environment:
-		MYSQL_ROOT_PASSWORD: password
-		MYSQL_DATABASE: template
-		MYSQL_USER: user
-		MYSQL_PASSWORD: password
-		TZ: Asia/Tokyo
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: template
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: Asia/Tokyo
   proxy_server:
-		tty : true
-		image: nginx
-		ports:
-			- "80:80"
-		volumes:
-			- ./proxy_server/conf:/etc/nginx/conf.d
-			- ./proxy_server/log:/var/log/nginx/
-		depends_on: 
-			- application_server
+    tty : true
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./proxy_server/conf:/etc/nginx/conf.d
+      - ./proxy_server/log:/var/log/nginx/
+    depends_on: 
+      - application_server
